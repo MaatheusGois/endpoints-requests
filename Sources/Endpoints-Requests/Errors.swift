@@ -1,9 +1,8 @@
 //
-//  Errors.swift
-//  Endpoints Requests
+//  File.swift
+//  
 //
-//  Created by Pedro Giuliano Farina on 09/12/19.
-//  Copyright © 2019 Pedro Giuliano Farina. All rights reserved.
+//  Created by Matheus Silva on 29/03/20.
 //
 
 import Foundation

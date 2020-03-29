@@ -1,11 +1,3 @@
-//
-//  EndpointsRequests.swift
-//  Endpoints Requests
-//
-//  Created by Pedro Giuliano Farina on 09/12/19.
-//  Copyright © 2019 Pedro Giuliano Farina. All rights reserved.
-//
-
 import Foundation
 
 private struct NilCodable: Codable {
@@ -216,4 +208,3 @@ public class EndpointsRequests {
     }
 
 }
-

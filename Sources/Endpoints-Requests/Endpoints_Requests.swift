@@ -1,14 +1,10 @@
 import Foundation
 
-private struct NilCodable: Codable {
-}
+private struct NilCodable: Codable { }
 
 public enum HttpMethods: String {
     case get = "GET"
     case post = "POST"
-    case patch = "PATCH"
-    case put = "PUT"
-    case delete = "DELETE"
 }
 
 public enum TaskAnswer<T> {
@@ -17,9 +13,9 @@ public enum TaskAnswer<T> {
 }
 
 public class EndpointsRequests {
-    private init() {
-    }
-
+    
+    private init() {}
+    
     private static func createRequest(url: String, method: HttpMethods) -> NSMutableURLRequest? {
         guard let URL = URL(string: url) else {
             return nil
@@ -28,12 +24,12 @@ public class EndpointsRequests {
         request.httpMethod = method.rawValue
         return request
     }
-
+    
     /**
      This function performs a get request and triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter url: The url address to make the requisition.
      - Parameter header: The request's header, separated by key and values.
      - Parameter completion: The block of code that will execute after the get request is executed.
@@ -41,43 +37,39 @@ public class EndpointsRequests {
     public static func getRequest(url: String, header: [String: String]? = nil, completion: @escaping (TaskAnswer<Any>) -> Void) {
         getRequest(url: url, decodableType: NilCodable.self, header: header, completion: completion)
     }
-
+    
     /**
      This function performs a get request, transforms its answer into a Decodable, and triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter url: The url address to make the requisition.
      - Parameter decodableType: The decodable type that conforms to the get request answer.
      - Parameter header: The request's header, separated by key and values.
      - Parameter completion: The block of code that will execute after the get request is executed.
      */
-    public static func getRequest<T: Decodable>(
+    public static func getRequest<T: Codable> (
         url: String,
         decodableType: T.Type,
         header: [String: String]? = nil,
         completion: @escaping (TaskAnswer<Any>) -> Void ) {
-
-        //Creating a request and making sure it exists.
+        
         guard let request = createRequest(url: url, method: .get) else {
             completion(TaskAnswer.error(NotURLError(title: nil, description: "Couldn't parse argument to URL")))
             return
         }
-
-        //Adding each header parameter to the request.
         for headerParam in header ?? [:] {
             request.addValue(headerParam.value, forHTTPHeaderField: headerParam.key)
         }
-
-        //Creating the get task with the request, and executing it.
         createTask(request: request as URLRequest, decodableType: decodableType, completion: completion).resume()
     }
-
+    
+    
     /**
      This function performs a post request, and triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter url: The url address to make the requisition.
      - Parameter method: The http method in the request.
      - Parameter header: The request's header, separated by key and values.
@@ -92,12 +84,12 @@ public class EndpointsRequests {
         completion: @escaping (TaskAnswer<Any>) -> Void) {
         postRequest(url: url, params: params, decodableType: NilCodable.self, completion: completion)
     }
-
+    
     /**
      This function performs a post request, transforms its answer into a Decodable, and triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter url: The url address to make the requisition.
      - Parameter method: The http method in the request.
      - Parameter header: The request's header, separated by key and values.
@@ -112,31 +104,31 @@ public class EndpointsRequests {
         params: [String: Any],
         decodableType: T.Type,
         completion: @escaping (TaskAnswer<Any>) -> Void) {
-
+        
         //Creating a request and making sure it exists.
         guard let request = createRequest(url: url, method: method) else {
             completion(TaskAnswer.error(NotURLError(title: nil, description: "Couldn't parse argument to URL")))
             return
         }
-
+        
         //Adding each header parameter to the request.
         for headerParam in header ?? [:] {
             request.addValue(headerParam.value, forHTTPHeaderField: headerParam.key)
         }
-
+        
         //Transforming the parameters into a string and putting into the httpBody.
         let postString = params.percentEscaped()
         request.httpBody = postString.data(using: String.Encoding.utf8)
-
+        
         //Creating the post task with the request, and executing it.
         createTask(request: request as URLRequest, decodableType: decodableType, completion: completion).resume()
     }
-
+    
     /**
      This function performs a post request, transforms its answer into a Decodable, and triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter url: The url address to make the requisition.
      - Parameter method: The http method in the request.
      - Parameter header: The request's header, separated by key and values.
@@ -151,34 +143,34 @@ public class EndpointsRequests {
         params: P,
         decodableType: T.Type,
         completion: @escaping (TaskAnswer<Any>) -> Void) {
-
+        
         //Creating a request and making sure it exists.
         guard let request = createRequest(url: url, method: method) else {
             completion(TaskAnswer.error(NotURLError(title: nil, description: "Couldn't parse argument to URL")))
             return
         }
-
+        
         //Adding each header parameter to the request.
         for headerParam in header ?? [:] {
             request.addValue(headerParam.value, forHTTPHeaderField: headerParam.key)
         }
-
+        
         //Encoding the parameter to the httpBody.
         do {
             request.httpBody = try JSONEncoder().encode(params)
         } catch {
             completion(TaskAnswer.error(InvalidCodableError(title: nil, description: "Couldn't encode object to JSON")))
         }
-
+        
         //Creating the post task with the request, and executing it.
         createTask(request: request as URLRequest, decodableType: decodableType, completion: completion).resume()
     }
-
+    
     /**
      This function creates a DataTask from a URL request, and when resumed, triggers a completion handler with its answer.
-
+     
      - Warning: This method is asyncronous.
-
+     
      - Parameter request: The URL Request.
      - Parameter decodableType: The decodable type that conforms to the get request answer.
      - Parameter completion: The block of code that will execute after the get request is executed.
@@ -206,5 +198,4 @@ public class EndpointsRequests {
         }
         return task
     }
-
 }

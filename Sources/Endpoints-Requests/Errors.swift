@@ -19,9 +19,21 @@ struct NotURLError: MyErrorProtocol {
     private var _description: String
 
     init(title: String?, description: String) {
-        self.title = title ?? "Invalid parse to URL"
+        self.title = title ?? "Invalid parse to URL."
         self._description = description
     }
 }
 
+struct InvalidCodableError: MyErrorProtocol {
+    var title: String?
+    var errorDescription: String? { return _description }
+    var failureReason: String? { return _description }
+
+    private var _description: String
+
+    init(title: String?, description: String) {
+        self.title = title ?? "Invalid Codable Object."
+        self._description = description
+    }
+}
 

@@ -1,5 +1,6 @@
 # Endpoints-Requests
 A simplified Swift library to manage gets and posts from servers.
+Made By [Farina](https://github.com/PedroFarina)
 
 ## This framework was built for handling gets and posts from any servers.
 

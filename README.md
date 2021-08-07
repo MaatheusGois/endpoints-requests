@@ -1,6 +1,8 @@
 # SPM Endpoints requests
-A simplified Swift library to manage gets and posts from servers. Original code from [Farina](https://github.com/PedroFarina)
-
+A simplified Swift library to manage gets and posts from servers.
+```
+original code from [Farina](https://github.com/PedroFarina)
+```
 ## This framework was built for handling gets and posts from any servers.
 
 ### Get:

@@ -12,7 +12,7 @@ public enum TaskAnswer<T> {
     case error(Error)
 }
 
-public class EndpointsRequests {
+public class Networking {
     private init() {
     }
 
